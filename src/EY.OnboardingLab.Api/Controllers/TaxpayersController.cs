@@ -1,3 +1,4 @@
+using EY.OnboardingLab.Api.Dtos.Dependents;
 using EY.OnboardingLab.Api.Dtos.Taxpayers;
 using EY.OnboardingLab.Core.Entities;
 using EY.OnboardingLab.Services.Interfaces;
@@ -12,10 +13,12 @@ namespace EY.OnboardingLab.Api.Controllers;
 public class TaxpayersController : ControllerBase
 {
     private readonly ITaxpayerService _taxpayerService;
+    private readonly IDependentService _dependentService;
 
-    public TaxpayersController(ITaxpayerService taxpayerService)
+    public TaxpayersController(ITaxpayerService taxpayerService, IDependentService dependentService)
     {
         _taxpayerService = taxpayerService;
+        _dependentService = dependentService;
     }
 
     // GET: /api/taxpayers
@@ -37,6 +40,42 @@ public class TaxpayersController : ControllerBase
             return NotFound();
 
         return Ok(taxpayer);
+    }
+
+    // GET: /api/taxpayers/{id}/dependents
+    [HttpGet("{id:guid}/dependents")]
+    public async Task<ActionResult<List<DependentResponseDto>>> GetDependents(Guid id, CancellationToken cancellationToken)
+    {
+        var dependents = await _dependentService.GetByTaxpayerIdAsync(id, cancellationToken);
+        return Ok(dependents.Select(ToDto).ToList());
+    }
+
+    // POST: /api/taxpayers/{id}/dependents
+    [HttpPost("{id:guid}/dependents")]
+    [Authorize(Roles = "Admin,Preparer")]
+    public async Task<ActionResult<DependentResponseDto>> AddDependent(
+        Guid id,
+        CreateDependentRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(request.Name))
+            return BadRequest("Name is required.");
+
+        if (string.IsNullOrWhiteSpace(request.Relationship))
+            return BadRequest("Relationship is required.");
+
+        if (request.DateOfBirth == default)
+            return BadRequest("DateOfBirth is required.");
+
+        var created = await _dependentService.AddAsync(
+            id,
+            new CreateDependentRequest(
+                request.Name.Trim(),
+                request.Relationship.Trim(),
+                request.DateOfBirth),
+            cancellationToken);
+
+        return Ok(ToDto(created));
     }
 
     // POST: /api/taxpayers
@@ -87,5 +126,16 @@ public class TaxpayersController : ControllerBase
             return NotFound();
 
         return NoContent();
+    }
+
+    private static DependentResponseDto ToDto(Dependent dependent)
+    {
+        return new DependentResponseDto(
+            Id: dependent.Id,
+            TaxpayerId: dependent.TaxpayerId,
+            Name: dependent.Name,
+            Relationship: dependent.Relationship,
+            DateOfBirth: dependent.DateOfBirth,
+            CreatedAtUtc: dependent.CreatedAtUtc);
     }
 }

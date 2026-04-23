@@ -1,5 +1,6 @@
 using EY.OnboardingLab.Infrastructure.Auth;
 using EY.OnboardingLab.Infrastructure.Data;
+using EY.OnboardingLab.Infrastructure.Dependents;
 using EY.OnboardingLab.Infrastructure.Taxpayers;
 using EY.OnboardingLab.Infrastructure.Users;
 using EY.OnboardingLab.Services.Interfaces;
@@ -20,6 +21,7 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(connectionString));
 
+        services.AddScoped<IDependentService, DependentService>();
         services.AddScoped<ITaxpayerService, TaxpayerService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();

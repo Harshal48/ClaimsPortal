@@ -11,4 +11,5 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Taxpayer> Taxpayers => Set<Taxpayer>();
+    public DbSet<Dependent> Dependents => Set<Dependent>();
 }

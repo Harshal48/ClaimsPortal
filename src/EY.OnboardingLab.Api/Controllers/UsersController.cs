@@ -19,6 +19,7 @@ public class UsersController : ControllerBase
 
     // POST: /api/users
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<UserResponseDto>> Create(CreateUserRequestDto request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.UserName))

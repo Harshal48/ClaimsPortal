@@ -47,6 +47,16 @@ public class AuthController : ControllerBase
         return Ok(response);
     }
 
+    // POST: /api/auth/logout
+    [HttpPost("logout")]
+    [Authorize]
+    public IActionResult Logout()
+    {
+        // With JWT, "logout" is simply the client deleting the token.
+        // We return 200 OK so the frontend can treat it as a successful logout.
+        return Ok(new { message = "Logged out." });
+    }
+
     // GET: /api/auth/me
     [HttpGet("me")]
     [Authorize]
