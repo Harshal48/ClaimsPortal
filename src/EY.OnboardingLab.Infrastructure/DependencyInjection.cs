@@ -1,6 +1,7 @@
 using EY.OnboardingLab.Infrastructure.Auth;
 using EY.OnboardingLab.Infrastructure.Data;
 using EY.OnboardingLab.Infrastructure.Dependents;
+using EY.OnboardingLab.Infrastructure.Reports;
 using EY.OnboardingLab.Infrastructure.Review;
 using EY.OnboardingLab.Infrastructure.Returns;
 using EY.OnboardingLab.Infrastructure.Taxpayers;
@@ -24,6 +25,7 @@ public static class DependencyInjection
             options.UseSqlServer(connectionString));
 
         services.AddScoped<IDependentService, DependentService>();
+        services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped<ITaxReturnService, TaxReturnService>();
         services.AddScoped<ITaxpayerService, TaxpayerService>();
