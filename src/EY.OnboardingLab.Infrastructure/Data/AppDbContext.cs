@@ -14,4 +14,6 @@ public class AppDbContext : DbContext
     public DbSet<Dependent> Dependents => Set<Dependent>();
     public DbSet<TaxReturn> TaxReturns => Set<TaxReturn>();
     public DbSet<Deduction> Deductions => Set<Deduction>();
+    public DbSet<TaxReview> TaxReviews => Set<TaxReview>();
+    public DbSet<Activity> Activities => Set<Activity>();
 }
