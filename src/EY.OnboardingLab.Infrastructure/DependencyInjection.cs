@@ -4,6 +4,7 @@ using EY.OnboardingLab.Infrastructure.Dependents;
 using EY.OnboardingLab.Infrastructure.Reports;
 using EY.OnboardingLab.Infrastructure.Review;
 using EY.OnboardingLab.Infrastructure.Returns;
+using EY.OnboardingLab.Infrastructure.TaxpayerPii;
 using EY.OnboardingLab.Infrastructure.Taxpayers;
 using EY.OnboardingLab.Infrastructure.Users;
 using EY.OnboardingLab.Services.Interfaces;
@@ -28,6 +29,7 @@ public static class DependencyInjection
         services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped<ITaxReturnService, TaxReturnService>();
+        services.AddScoped<ITaxpayerPiiService, TaxpayerPiiService>();
         services.AddScoped<ITaxpayerService, TaxpayerService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();

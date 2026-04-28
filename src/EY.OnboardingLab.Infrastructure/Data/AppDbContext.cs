@@ -17,4 +17,5 @@ public class AppDbContext : DbContext
     public DbSet<TaxReview> TaxReviews => Set<TaxReview>();
     public DbSet<Activity> Activities => Set<Activity>();
     public DbSet<Report> Reports => Set<Report>();
+    public DbSet<TaxpayerPii> TaxpayerPiis => Set<TaxpayerPii>();
 }
