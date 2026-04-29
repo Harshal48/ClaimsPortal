@@ -1,7 +1,7 @@
 using EY.OnboardingLab.Api.Dtos.Review;
+using EY.OnboardingLab.Api.Filters;
 using EY.OnboardingLab.Core.Entities;
 using EY.OnboardingLab.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,7 +10,7 @@ namespace EY.OnboardingLab.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin,Reviewer")]
+[RoleAuthorize("Admin", "Reviewer")]
 public class ReviewController : ControllerBase
 {
     private readonly IReviewService _reviewService;

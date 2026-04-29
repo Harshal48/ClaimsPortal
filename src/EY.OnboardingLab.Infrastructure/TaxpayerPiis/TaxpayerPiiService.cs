@@ -3,7 +3,7 @@ using EY.OnboardingLab.Infrastructure.Data;
 using EY.OnboardingLab.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace EY.OnboardingLab.Infrastructure.TaxpayerPii;
+namespace EY.OnboardingLab.Infrastructure.TaxpayerPiis;
 
 public class TaxpayerPiiService : ITaxpayerPiiService
 {
