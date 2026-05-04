@@ -1,0 +1,35 @@
+<div class="page">
+  <div class="card">
+    <h1>Claims Portal</h1>
+    <p class="subtitle">Sign in</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label>
+        <span>Username / Email</span>
+        <input
+          type="text"
+          formControlName="userNameOrEmail"
+          placeholder="admin1 or admin1@demo.com"
+          autocomplete="username"
+        />
+      </label>
+
+      <label>
+        <span>Password</span>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="••••••••"
+          autocomplete="current-password"
+        />
+      </label>
+
+      <button type="submit" [disabled]="form.invalid || loading">
+        {{ loading ? 'Signing in…' : 'Sign in' }}
+      </button>
+
+      <p class="error" *ngIf="error">{{ error }}</p>
+    </form>
+  </div>
+</div>
+

@@ -31,7 +31,7 @@ public sealed class RoleAuthorizeAttribute : Attribute, IAuthorizationFilter
 
         var ok = _roles.Any(role => user.IsInRole(role));
         if (!ok)
-            context.Result = new ForbidResult();
+            context.Result = new ForbidResult();   //403 Forbidden
     }
 }
 
