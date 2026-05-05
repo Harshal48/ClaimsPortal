@@ -8,7 +8,7 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './login.component.html',
+  templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class LoginComponent implements OnInit {
@@ -53,4 +53,3 @@ export class LoginComponent implements OnInit {
     }
   }
 }
-
