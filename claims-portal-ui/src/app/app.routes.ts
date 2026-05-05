@@ -18,4 +18,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/home/home').then((m) => m.HomeComponent),
   },
+  {
+    path: 'taxpayers',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/taxpayers/taxpayers').then((m) => m.TaxpayersComponent),
+  },
 ];

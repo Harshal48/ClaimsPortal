@@ -1,0 +1,179 @@
+.page {
+  min-height: 100vh;
+  padding: 24px;
+  background: #0b1220;
+}
+
+.card {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  background: #111a2e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin: 0 0 4px 0;
+  font-size: 22px;
+}
+
+h2 {
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.actions a {
+  color: #93c5fd;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.actions a:hover {
+  text-decoration: underline;
+}
+
+.panel {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 16px;
+  margin-top: 16px;
+}
+
+.panel:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.panel-head h2 {
+  margin: 0;
+}
+
+form {
+  display: grid;
+  gap: 12px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+}
+
+label span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+input {
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  outline: none;
+}
+
+input:focus {
+  border-color: rgba(99, 179, 237, 0.65);
+  box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.15);
+}
+
+button {
+  margin-top: 4px;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-weight: 600;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+button.secondary {
+  margin-top: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  margin: 0;
+  color: #fca5a5;
+  font-size: 13px;
+}
+
+.muted {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 14px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th,
+td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}

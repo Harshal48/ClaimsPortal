@@ -26,6 +26,20 @@ h1 {
   color: rgba(255, 255, 255, 0.7);
 }
 
+.nav-row {
+  margin: 0 0 16px 0;
+}
+
+.nav-row a {
+  color: #93c5fd;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nav-row a:hover {
+  text-decoration: underline;
+}
+
 button {
   border: 0;
   border-radius: 10px;

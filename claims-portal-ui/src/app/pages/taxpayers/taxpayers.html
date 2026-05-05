@@ -1,0 +1,71 @@
+<div class="page">
+  <div class="card">
+    <header class="top">
+      <div>
+        <h1>Taxpayers</h1>
+        <p class="subtitle">List and create taxpayers (API: GET/POST /api/taxpayers).</p>
+      </div>
+      <nav class="actions">
+        <a routerLink="/home">Home</a>
+        <button type="button" (click)="logout()">Log out</button>
+      </nav>
+    </header>
+
+    <section class="panel">
+      <h2>New taxpayer</h2>
+      <form [formGroup]="form" (ngSubmit)="onCreate()">
+        <label>
+          <span>Taxpayer number</span>
+          <input formControlName="taxpayerNumber" autocomplete="off" />
+        </label>
+        <label>
+          <span>Legal name</span>
+          <input formControlName="legalName" autocomplete="name" />
+        </label>
+        @if (formError) {
+          <p class="error">{{ formError }}</p>
+        }
+        <button type="submit" [disabled]="saving || form.invalid">
+          {{ saving ? 'Saving…' : 'Create' }}
+        </button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>All taxpayers</h2>
+        <button type="button" class="secondary" (click)="refreshList()" [disabled]="loadingList">
+          {{ loadingList ? 'Loading…' : 'Refresh' }}
+        </button>
+      </div>
+      @if (listError) {
+        <p class="error">{{ listError }}</p>
+      }
+      @if (!loadingList && !listError && taxpayers.length === 0) {
+        <p class="muted">No taxpayers yet. Create one above.</p>
+      }
+      @if (taxpayers.length > 0) {
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Number</th>
+                <th>Legal name</th>
+                <th>Created (UTC)</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (t of taxpayers; track t.id) {
+                <tr>
+                  <td>{{ t.taxpayerNumber }}</td>
+                  <td>{{ t.legalName }}</td>
+                  <td>{{ t.createdAtUtc | date : 'medium' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  </div>
+</div>
