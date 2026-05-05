@@ -1,0 +1,105 @@
+<div class="page">
+  <div class="card">
+    <header class="top">
+      <div>
+        <h1>Tax returns</h1>
+        <p class="subtitle">
+          Create returns for a taxpayer (POST /api/returns). Requires Admin or Preparer to create.
+        </p>
+      </div>
+      <nav class="actions">
+        <a routerLink="/home">Home</a>
+        <a routerLink="/taxpayers">Taxpayers</a>
+        <button type="button" (click)="logout()">Log out</button>
+      </nav>
+    </header>
+
+    <section class="panel">
+      <h2>New return</h2>
+      @if (taxpayersError) {
+        <p class="error">{{ taxpayersError }}</p>
+      }
+      @if (!taxpayers.length && !loadingTaxpayers && !taxpayersError) {
+        <p class="muted">
+          No taxpayers yet.
+          <a routerLink="/taxpayers">Create a taxpayer first</a>.
+        </p>
+      }
+      <form [formGroup]="form" (ngSubmit)="onCreate()">
+        <label>
+          <span>Taxpayer</span>
+          <select formControlName="taxpayerId">
+            <option value="">Select taxpayer…</option>
+            @for (t of taxpayers; track t.id) {
+              <option [value]="t.id">{{ t.taxpayerNumber }} — {{ t.legalName }}</option>
+            }
+          </select>
+        </label>
+        <label>
+          <span>Tax year</span>
+          <input type="number" formControlName="taxYear" min="1900" max="2100" />
+        </label>
+        <label>
+          <span>Filing status</span>
+          <select formControlName="filingStatus">
+            @for (opt of filingOptions; track opt) {
+              <option [value]="opt">{{ opt }}</option>
+            }
+          </select>
+        </label>
+        @if (formError) {
+          <p class="error">{{ formError }}</p>
+        }
+        <button
+          type="submit"
+          [disabled]="saving || form.invalid || !taxpayers.length"
+        >
+          {{ saving ? 'Saving…' : 'Create return' }}
+        </button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>All returns</h2>
+        <button type="button" class="secondary" (click)="refreshList()" [disabled]="loadingList">
+          {{ loadingList ? 'Loading…' : 'Refresh' }}
+        </button>
+      </div>
+      @if (listError) {
+        <p class="error">{{ listError }}</p>
+      }
+      @if (!loadingList && !listError && returns.length === 0) {
+        <p class="muted">No tax returns yet.</p>
+      }
+      @if (returns.length > 0) {
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Status</th>
+                <th>Filing</th>
+                <th>Taxpayer</th>
+                <th class="num">Income</th>
+                <th class="num">Deductions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of returns; track r.id) {
+                <tr>
+                  <td>{{ r.taxYear }}</td>
+                  <td>{{ r.returnStatus }}</td>
+                  <td>{{ r.filingStatus }}</td>
+                  <td>{{ taxpayerLabel(r.taxpayerId) }}</td>
+                  <td class="num">{{ r.totalIncome | number : '1.2-2' }}</td>
+                  <td class="num">{{ r.totalDeduction | number : '1.2-2' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  </div>
+</div>

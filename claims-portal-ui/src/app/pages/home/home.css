@@ -28,6 +28,15 @@ h1 {
 
 .nav-row {
   margin: 0 0 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.nav-sep {
+  color: rgba(255, 255, 255, 0.35);
+  user-select: none;
 }
 
 .nav-row a {
