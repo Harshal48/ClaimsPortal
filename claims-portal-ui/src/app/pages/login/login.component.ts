@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  styleUrl: './login.css',
 })
 export class LoginComponent implements OnInit {
   private readonly fb = inject(FormBuilder);

@@ -8,7 +8,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  styleUrl: './home.css',
 })
 export class HomeComponent {
   private readonly auth = inject(AuthService);
