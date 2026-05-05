@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { ReturnDetailComponent } from './pages/return-detail/return-detail';
 
 export const routes: Routes = [
   {
@@ -27,15 +28,20 @@ export const routes: Routes = [
   {
     path: 'returns/:id',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./pages/return-detail/return-detail').then(
-        (m) => m.ReturnDetailComponent,
-      ),
+    // Eager standalone route: avoids lazy-chunk fetch on navigation (often the
+    // main "slow" feeling in dev, especially over OneDrive / cold cache).
+    component: ReturnDetailComponent,
   },
   {
     path: 'returns',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/returns/returns').then((m) => m.ReturnsComponent),
+  },
+  {
+    path: 'review',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/review/review').then((m) => m.ReviewComponent),
   },
 ];

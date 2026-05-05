@@ -1,0 +1,115 @@
+<div class="page">
+  <div class="card">
+    <header class="top">
+      <div>
+        <h1>Review queue</h1>
+        <p class="subtitle">
+          Submitted returns awaiting review (Admin / Reviewer). GET /api/review/pending.
+        </p>
+      </div>
+      <nav class="actions">
+        <a routerLink="/home">Home</a>
+        <a routerLink="/returns">Tax returns</a>
+        <button type="button" (click)="logout()">Log out</button>
+      </nav>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Pending</h2>
+        <button type="button" class="secondary" (click)="refreshPending()" [disabled]="loadingList">
+          {{ loadingList ? 'Loading…' : 'Refresh' }}
+        </button>
+      </div>
+      @if (listError) {
+        <p class="error">{{ listError }}</p>
+      }
+      @if (!loadingList && !listError && pending.length === 0) {
+        <p class="muted">No returns are waiting for review right now.</p>
+      }
+      @if (pending.length > 0) {
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Status</th>
+                <th>Filing</th>
+                <th class="num">Income</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of pending; track r.id) {
+                <tr [class.selected]="selected?.id === r.id">
+                  <td>{{ r.taxYear }}</td>
+                  <td>{{ r.returnStatus }}</td>
+                  <td>{{ r.filingStatus }}</td>
+                  <td class="num">{{ r.totalIncome | number : '1.2-2' }}</td>
+                  <td>
+                    <button type="button" class="small" (click)="select(r)">Select</button>
+                    <a class="open-link" [routerLink]="['/returns', r.id]">Return</a>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+
+    @if (selected) {
+      <section class="panel">
+        <h2>Decision</h2>
+        <p class="muted">
+          Return <code>{{ selected.id }}</code> ·
+          <a class="open-link" [routerLink]="['/returns', selected.id]">Open in return detail</a>
+        </p>
+        <label class="block">
+          <span>Comments (optional)</span>
+          <textarea rows="3" [formControl]="commentCtrl" placeholder="Notes for the preparer…"></textarea>
+        </label>
+        @if (actionError) {
+          <p class="error">{{ actionError }}</p>
+        }
+        <div class="btn-row">
+          <button type="button" class="ok" [disabled]="acting" (click)="approve()">
+            {{ acting ? 'Working…' : 'Approve' }}
+          </button>
+          <button type="button" class="warn" [disabled]="acting" (click)="requestChanges()">
+            Request changes
+          </button>
+          <button type="button" class="danger" [disabled]="acting" (click)="reject()">
+            Reject
+          </button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>History</h2>
+        @if (loadingHistory) {
+          <p class="muted">Loading history…</p>
+        }
+        @if (historyError) {
+          <p class="error">{{ historyError }}</p>
+        }
+        @if (!loadingHistory && !historyError && history.length === 0) {
+          <p class="muted">No review history yet for this return.</p>
+        }
+        @if (history.length > 0) {
+          <ul class="history">
+            @for (h of history; track h.id) {
+              <li>
+                <span class="hist-meta">{{ h.createdAtUtc | date : 'medium' }}</span>
+                <span class="hist-status">{{ h.oldStatus }} → {{ h.newStatus }}</span>
+                @if (h.comments) {
+                  <p class="hist-comments">{{ h.comments }}</p>
+                }
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    }
+  </div>
+</div>
