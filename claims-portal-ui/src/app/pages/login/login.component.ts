@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, type OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
@@ -24,6 +24,12 @@ export class LoginComponent {
     password: ['', [Validators.required]],
   });
 
+  ngOnInit(): void {
+    if (this.auth.getAccessToken()) {
+      void this.router.navigateByUrl('/home');
+    }
+  }
+
   async onSubmit(): Promise<void> {
     this.error = null;
     if (this.form.invalid) return;
@@ -32,9 +38,16 @@ export class LoginComponent {
     try {
       const { userNameOrEmail, password } = this.form.getRawValue();
       await this.auth.login({ userNameOrEmail, password });
-      await this.router.navigateByUrl('/home');
-    } catch {
-      this.error = 'Invalid username/email or password.';
+
+      const navigated = await this.router.navigateByUrl('/home');
+      if (!navigated) {
+        throw new Error('Navigation failed after login (no matching route).');
+      }
+    } catch (err) {
+      this.error =
+        err instanceof Error
+          ? err.message
+          : 'Invalid username/email or password.';
     } finally {
       this.loading = false;
     }
