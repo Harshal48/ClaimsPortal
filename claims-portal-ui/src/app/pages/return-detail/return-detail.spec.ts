@@ -41,11 +41,9 @@ describe('ReturnDetailComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    for (const r of http.match('/api/taxpayers')) {
-      r.flush([]);
-    }
-    for (const r of http.match((req) => req.url.endsWith(`/api/returns/${testId}`))) {
-      r.flush({
+    http
+      .expectOne((req) => req.url.endsWith(`/api/returns/${testId}`))
+      .flush({
         id: testId,
         taxpayerId: testId,
         taxYear: 2026,
@@ -58,7 +56,19 @@ describe('ReturnDetailComponent', () => {
         createdAtUtc: new Date().toISOString(),
         updatedAtUtc: new Date().toISOString(),
       });
-    }
+
+    fixture.detectChanges();
+
+    http
+      .expectOne((req) => req.url.endsWith(`/api/taxpayers/${testId}`))
+      .flush({
+        id: testId,
+        taxpayerNumber: 'T-1',
+        legalName: 'Test Taxpayer',
+        createdAtUtc: new Date().toISOString(),
+        updatedAtUtc: null,
+        createdByUserId: null,
+      });
 
     fixture.detectChanges();
   });

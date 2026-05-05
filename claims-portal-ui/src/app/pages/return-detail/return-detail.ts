@@ -29,7 +29,8 @@ export class ReturnDetailComponent implements OnInit {
 
   returnId: string | null = null;
   loading = false;
-  taxpayers: Taxpayer[] = [];
+  /** Loaded lazily via GET /api/taxpayers/:id for the header label only. */
+  headerTaxpayer: Taxpayer | null = null;
   ret: TaxReturn | null = null;
 
   loadError: string | null = null;
@@ -75,7 +76,7 @@ export class ReturnDetailComponent implements OnInit {
       return;
     }
 
-    await Promise.all([this.loadTaxpayers(), this.reloadReturn()]);
+    await this.reloadReturn();
   }
 
   get isDraft(): boolean {
@@ -84,16 +85,21 @@ export class ReturnDetailComponent implements OnInit {
   }
 
   taxpayerLabel(id: string): string {
-    const t = this.taxpayers.find((x) => x.id === id);
-    if (!t) return id.slice(0, 8) + '…';
-    return `${t.taxpayerNumber} — ${t.legalName}`;
+    const t = this.headerTaxpayer;
+    if (t?.id === id) {
+      return `${t.taxpayerNumber} — ${t.legalName}`;
+    }
+    return id.slice(0, 8) + '…';
   }
 
-  async loadTaxpayers(): Promise<void> {
+  private async loadHeaderTaxpayer(taxpayerId: string): Promise<void> {
     try {
-      this.taxpayers = await this.taxpayersApi.getAll();
+      const t = await this.taxpayersApi.getById(taxpayerId);
+      if (this.ret?.taxpayerId === taxpayerId) {
+        this.headerTaxpayer = t;
+      }
     } catch {
-      // Non-fatal; taxpayer header falls back to partial id.
+      // Non-fatal; header falls back to truncated id via taxpayerLabel.
     }
   }
 
@@ -154,7 +160,7 @@ export class ReturnDetailComponent implements OnInit {
       this.ret = await this.returnsApi.addIncome(this.returnId, {
         amount: Number(amount),
       });
-      this.incomeForm.reset({ amount: 0 });
+      this.incomeForm.reset({ amount: 1 });
     } catch (err) {
       this.incomeError =
         err instanceof Error ? err.message : 'Could not add income.';

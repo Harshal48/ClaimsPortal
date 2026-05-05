@@ -31,6 +31,18 @@ export class TaxpayerService {
     }
   }
 
+  async getById(id: string): Promise<Taxpayer> {
+    try {
+      return await firstValueFrom(
+        this.http.get<Taxpayer>(
+          `/api/taxpayers/${encodeURIComponent(id)}`,
+        ),
+      );
+    } catch (err) {
+      throw this.toError(err, 'Could not load taxpayer.');
+    }
+  }
+
   async create(request: CreateTaxpayerRequest): Promise<Taxpayer> {
     try {
       return await firstValueFrom(
