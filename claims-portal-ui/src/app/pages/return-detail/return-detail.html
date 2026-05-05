@@ -1,0 +1,141 @@
+<div class="page">
+  <div class="card">
+    <header class="top">
+      <div>
+        <p class="crumb">
+          <a routerLink="/returns">Tax returns</a>
+          <span class="sep">/</span>
+          <span>Detail</span>
+        </p>
+        @if (ret) {
+          <h1>Tax year {{ ret.taxYear }}</h1>
+          <p class="subtitle">
+            Status <strong>{{ ret.returnStatus }}</strong>
+            · Taxpayer {{ taxpayerLabel(ret.taxpayerId) }}
+          </p>
+        } @else if (!loading && loadError) {
+          <h1>Tax return</h1>
+          <p class="subtitle">Could not open this return.</p>
+        } @else {
+          <h1>Tax return</h1>
+          <p class="subtitle">Loading…</p>
+        }
+      </div>
+      <nav class="actions">
+        <a routerLink="/returns">All returns</a>
+        <a routerLink="/taxpayers">Taxpayers</a>
+        <button type="button" (click)="logout()">Log out</button>
+      </nav>
+    </header>
+
+    @if (loadError) {
+      <p class="error">{{ loadError }}</p>
+      <p class="muted"><a routerLink="/returns">Back to list</a></p>
+    }
+
+    @if (ret && !loadError) {
+      <section class="summary">
+        <div class="metric">
+          <span class="lbl">Total income</span>
+          <span class="val">{{ ret.totalIncome | number : '1.2-2' }}</span>
+        </div>
+        <div class="metric">
+          <span class="lbl">Total withheld</span>
+          <span class="val">{{ ret.totalWithheld | number : '1.2-2' }}</span>
+        </div>
+        <div class="metric">
+          <span class="lbl">Total deductions</span>
+          <span class="val">{{ ret.totalDeduction | number : '1.2-2' }}</span>
+        </div>
+      </section>
+
+      @if (!isDraft) {
+        <p class="muted panel-intro">
+          This return is no longer in Draft. Income, deductions, and filing updates are locked by the API.
+        </p>
+      }
+
+      @if (isDraft) {
+        <section class="panel">
+          <h2>Basics (Draft only)</h2>
+          <p class="hint">Save tax year and filing status (PUT).</p>
+          <form [formGroup]="basicsForm" (ngSubmit)="onSaveBasics()">
+            <div class="row">
+              <label>
+                <span>Tax year</span>
+                <input type="number" formControlName="taxYear" min="1900" max="2100" />
+              </label>
+              <label>
+                <span>Filing status</span>
+                <select formControlName="filingStatus">
+                  @for (opt of filingOptions; track opt) {
+                    <option [value]="opt">{{ opt }}</option>
+                  }
+                </select>
+              </label>
+            </div>
+            @if (basicsError) {
+              <p class="error">{{ basicsError }}</p>
+            }
+            <button type="submit" [disabled]="savingBasics || basicsForm.invalid">
+              {{ savingBasics ? 'Saving…' : 'Save basics' }}
+            </button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <h2>Add income</h2>
+          <p class="hint">Each save adds to total income (POST …/income).</p>
+          <form [formGroup]="incomeForm" (ngSubmit)="onAddIncome()">
+            <label>
+              <span>Amount</span>
+              <input type="number" formControlName="amount" min="0.01" step="0.01" />
+            </label>
+            @if (incomeError) {
+              <p class="error">{{ incomeError }}</p>
+            }
+            <button type="submit" [disabled]="savingIncome || incomeForm.invalid">
+              {{ savingIncome ? 'Adding…' : 'Add income' }}
+            </button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <h2>Add deduction</h2>
+          <p class="hint">Name, type, and amount (POST …/deductions).</p>
+          <form [formGroup]="deductionForm" (ngSubmit)="onAddDeduction()">
+            <label>
+              <span>Name</span>
+              <input formControlName="deductionName" autocomplete="off" />
+            </label>
+            <label>
+              <span>Type</span>
+              <input formControlName="deductionType" autocomplete="off" />
+            </label>
+            <label>
+              <span>Amount</span>
+              <input type="number" formControlName="amount" min="0.01" step="0.01" />
+            </label>
+            @if (deductionError) {
+              <p class="error">{{ deductionError }}</p>
+            }
+            <button type="submit" [disabled]="savingDeduction || deductionForm.invalid">
+              {{ savingDeduction ? 'Adding…' : 'Add deduction' }}
+            </button>
+          </form>
+        </section>
+
+        <section class="panel danger-zone">
+          <h2>Submit</h2>
+          <p class="hint">Submit locks the return (POST …/submit). No undo in this UI.</p>
+          @if (submitError) {
+            <p class="error">{{ submitError }}</p>
+          }
+          <button type="button" class="danger" (click)="onSubmit()" [disabled]="submitting">
+            {{ submitting ? 'Submitting…' : 'Submit return' }}
+          </button>
+        </section>
+      }
+    }
+  </div>
+</div>

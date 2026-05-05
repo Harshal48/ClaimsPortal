@@ -83,6 +83,7 @@
                 <th>Taxpayer</th>
                 <th class="num">Income</th>
                 <th class="num">Deductions</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -94,6 +95,7 @@
                   <td>{{ taxpayerLabel(r.taxpayerId) }}</td>
                   <td class="num">{{ r.totalIncome | number : '1.2-2' }}</td>
                   <td class="num">{{ r.totalDeduction | number : '1.2-2' }}</td>
+                  <td><a class="open-link" [routerLink]="['/returns', r.id]">Open</a></td>
                 </tr>
               }
             </tbody>

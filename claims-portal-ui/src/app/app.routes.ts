@@ -25,6 +25,14 @@ export const routes: Routes = [
       import('./pages/taxpayers/taxpayers').then((m) => m.TaxpayersComponent),
   },
   {
+    path: 'returns/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/return-detail/return-detail').then(
+        (m) => m.ReturnDetailComponent,
+      ),
+  },
+  {
     path: 'returns',
     canActivate: [authGuard],
     loadComponent: () =>
