@@ -32,7 +32,7 @@ export class LoginComponent {
     try {
       const { userNameOrEmail, password } = this.form.getRawValue();
       await this.auth.login({ userNameOrEmail, password });
-      await this.router.navigateByUrl('/');
+      await this.router.navigateByUrl('/home');
     } catch {
       this.error = 'Invalid username/email or password.';
     } finally {
